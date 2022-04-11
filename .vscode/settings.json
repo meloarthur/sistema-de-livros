@@ -1,0 +1,9 @@
+{
+    "java.project.sourcePaths": ["src"],
+    "java.project.outputPath": "bin",
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "C:/JavaFX/javafx-sdk-17.0.2/lib/**/*.jar",
+        "c:\\JavaFX\\javafx-sdk-17.0.2\\postgresql-42.3.3.jar"
+    ]
+}
