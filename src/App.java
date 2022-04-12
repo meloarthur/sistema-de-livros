@@ -1,3 +1,5 @@
+import dao.LivroDao;
+import domain.Livro;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,6 +13,17 @@ public class App extends Application{
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, 400, 300));
         primaryStage.show();
+
+        Livro livro = new Livro();
+
+        livro.setTitulo("Harry Potter");
+        livro.setIsbn("IDSN234SD");
+        livro.setEdicao(14);
+        livro.setAutor("J.K. Rowling");
+        livro.setDescricao("Uma criança da Inglaterra que descobre ser um bruxo.");
+
+        LivroDao livroDao = new LivroDao();
+        livroDao.obterTodos();
     }
 
     public static void main(String[] args) {

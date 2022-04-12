@@ -56,4 +56,10 @@ public class Livro {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
+    @Override
+    public String toString() {
+        return "Autor = " + autor + "\nDescrição = " + descricao + "\nEdição = " + edicao + "\nId = " + id + "\nISBN = "
+                + isbn + "\nTítulo = " + titulo + "\n\n";
+    }
 }
