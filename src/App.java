@@ -16,14 +16,10 @@ public class App extends Application{
 
         Livro livro = new Livro();
 
-        livro.setTitulo("Harry Potter");
-        livro.setIsbn("IDSN234SD");
-        livro.setEdicao(14);
-        livro.setAutor("J.K. Rowling");
-        livro.setDescricao("Uma criança da Inglaterra que descobre ser um bruxo.");
+        livro.setId(2);
 
         LivroDao livroDao = new LivroDao();
-        livroDao.obterTodos();
+        livroDao.obterPorId(livro);;
     }
 
     public static void main(String[] args) {

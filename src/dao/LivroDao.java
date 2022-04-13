@@ -4,10 +4,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import config.ConfigDB;
 import domain.Livro;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,7 +17,7 @@ public class LivroDao {
         String sql = "INSERT INTO livro (titulo, isbn, edicao, autor, descricao) VALUES (?, ?, ?, ?, ?)";
         
         try(
-            Connection connect = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/Livros", "postgres", "admin");
+            Connection connect = ConfigDB.getConnection();
             PreparedStatement stmt = connect.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         ){
             stmt.setString(1, livro.getTitulo());
@@ -30,26 +30,29 @@ public class LivroDao {
 
             ResultSet result = stmt.getGeneratedKeys();
             result.next();
-            livro.setId(result.getLong("id"));
+            livro.setId(result.getInt("id"));
+            stmt.close();
+            System.out.println("Linha inserida com sucesso!");
         } catch (SQLException e){
             e.printStackTrace();
         }
     }
 
-    public void obterTodos(){
-        String sql = "SELECT id, titulo, isbn, edicao, autor, descricao FROM livro";
+    public List<Livro> obterTodos(){
+        String sql = "SELECT * FROM livro";
+        List<Livro> livros = null;
 
         try(
-            Connection connect = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/Livros", "postgres", "admin");
-            Statement statement = connect.createStatement();
+            Connection connect = ConfigDB.getConnection();
+            Statement stmt = connect.createStatement();
         ){
-            ResultSet result = statement.executeQuery(sql);
-            List<Livro> livros = new ArrayList<>();
+            ResultSet result = stmt.executeQuery(sql);
+            livros = new ArrayList<>();
 
             while (result.next()){
                 Livro livro = new Livro();
 
-                livro.setId(result.getLong(1));
+                livro.setId(result.getInt(1));
                 livro.setTitulo(result.getString(2));
                 livro.setIsbn(result.getString(3));
                 livro.setEdicao(result.getInt(4));
@@ -63,58 +66,82 @@ public class LivroDao {
         } catch (SQLException e){
             e.printStackTrace();
         }
+
+        return livros;
     }
 
-    public void obterPorId(){
-        String sql = "SELECT id, titulo, isbn, edicao, autor, descricao FROM livro WHERE id = 1";
+    public Livro obterPorId(Livro livro){
+        String sql = "SELECT * FROM livro WHERE id = ?";
+        Livro livro = null;
 
         try(
-            Connection connect = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/Livros", "postgres", "admin");
-            Statement statement = connect.createStatement();
+            Connection connect = ConfigDB.getConnection();
+            PreparedStatement stmt = connect.prepareStatement(sql);
         ){
-            ResultSet result = statement.executeQuery(sql);
-            result.next();
+            stmt.setInt(1, livro.getId());
+            
+            stmt.executeQuery();
 
-            Livro livro = new Livro();
-
-            livro.setId(result.getLong(1));
-            livro.setTitulo(result.getString(2));
-            livro.setIsbn(result.getString(3));
-            livro.setEdicao(result.getInt(4));
-            livro.setAutor(result.getString(5));
-            livro.setDescricao(result.getString(6));
-
-            System.out.println(livro);
+            System.out.println(livro.toString());
         }  catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return livro;
     }
 
-    public void atualizar(){
-        String sql = "UPDATE livro SET edicao = 2 WHERE id = 1";
+    public void atualizar(Livro livro){
+        String sql = "UPDATE livro SET edicao = ? WHERE id = ?";
 
         try(
-            Connection connect = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/Livros", "postgres", "admin");
-            Statement statement = connect.createStatement();
+            Connection connect = ConfigDB.getConnection();
+            PreparedStatement stmt = connect.prepareStatement(sql);
         ){
-            int numLinhas = statement.executeUpdate(sql);
-            System.out.println(numLinhas);
+            stmt.setInt(1, livro.getEdicao());
+            stmt.setLong(2, livro.getId());
+
+            stmt.executeUpdate();
+
+            System.out.println("Linha atualizada com sucesso!");
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void deletar(){
-        String sql = "DELETE FROM livro WHERE id = 1";
+    public void deletar(Livro livro){
+        String sql = "DELETE FROM livro WHERE id = ?";
 
         try(
-            Connection connect = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/Livros", "postgres", "admin");
-            Statement statement = connect.createStatement();
+            Connection connect = ConfigDB.getConnection();
+            PreparedStatement stmt = connect.prepareStatement(sql);
         ){
-            int numLinhas = statement.executeUpdate(sql);
-            System.out.println(numLinhas);
+            stmt.setInt(1, livro.getId());
+
+            stmt.executeUpdate();
+            
+            System.out.println("Linha excluida com sucesso!");
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private void prepararParametros(PreparedStatement stmt, Livro livro) throws SQLException{
+        stmt.setInt(1, livro.getEdicao());
+        stmt.setString(2, livro.getTitulo());
+        stmt.setString(3, livro.getDescricao());
+        stmt.setString(4, livro.getIsbn());
+    }
+
+    private Livro obterLivroPorResultSet(ResultSet result) throws SQLException{
+        Livro livro = new Livro();
+
+        livro.setId(result.getInt("id"));
+        livro.setTitulo(result.getString("titulo"));
+        livro.setIsbn(result.getString("isbn"));
+        livro.setEdicao(result.getInt("edicao"));
+        livro.setAutor(result.getString("autor"));
+        livro.setDescricao(result.getString("descricao"));
+
+        return livro;
     }
 }
