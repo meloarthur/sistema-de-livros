@@ -44,25 +44,16 @@ public class LivroDao {
 
         try(
             Connection connect = ConfigDB.getConnection();
-            Statement stmt = connect.createStatement();
+            PreparedStatement stmt = connect.prepareStatement(sql);
         ){
-            ResultSet result = stmt.executeQuery(sql);
+            ResultSet result = stmt.executeQuery();
             livros = new ArrayList<>();
+            Livro livro;
 
             while (result.next()){
-                Livro livro = new Livro();
-
-                livro.setId(result.getInt(1));
-                livro.setTitulo(result.getString(2));
-                livro.setIsbn(result.getString(3));
-                livro.setEdicao(result.getInt(4));
-                livro.setAutor(result.getString(5));
-                livro.setDescricao(result.getString(6));
-
+                livro = obterLivroPorResultSet(result);
                 livros.add(livro);
             }
-
-            System.out.println(livros.toString());
         } catch (SQLException e){
             e.printStackTrace();
         }
@@ -70,7 +61,7 @@ public class LivroDao {
         return livros;
     }
 
-    public Livro obterPorId(Livro livro){
+    public Livro obterPorId(Integer id){
         String sql = "SELECT * FROM livro WHERE id = ?";
         Livro livro = null;
 
@@ -78,11 +69,12 @@ public class LivroDao {
             Connection connect = ConfigDB.getConnection();
             PreparedStatement stmt = connect.prepareStatement(sql);
         ){
-            stmt.setInt(1, livro.getId());
-            
-            stmt.executeQuery();
+            stmt.setInt(1, id);
+            ResultSet result = stmt.executeQuery();
 
-            System.out.println(livro.toString());
+            if (result.next()){
+                livro = obterLivroPorResultSet(result);
+            }
         }  catch (SQLException e) {
             e.printStackTrace();
         }
@@ -90,7 +82,7 @@ public class LivroDao {
         return livro;
     }
 
-    public void atualizar(Livro livro){
+    public void atualizarEdicao(Livro livro){
         String sql = "UPDATE livro SET edicao = ? WHERE id = ?";
 
         try(
@@ -99,8 +91,6 @@ public class LivroDao {
         ){
             stmt.setInt(1, livro.getEdicao());
             stmt.setLong(2, livro.getId());
-
-            stmt.executeUpdate();
 
             System.out.println("Linha atualizada com sucesso!");
         } catch (SQLException e) {
@@ -116,20 +106,12 @@ public class LivroDao {
             PreparedStatement stmt = connect.prepareStatement(sql);
         ){
             stmt.setInt(1, livro.getId());
-
             stmt.executeUpdate();
             
             System.out.println("Linha excluida com sucesso!");
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    private void prepararParametros(PreparedStatement stmt, Livro livro) throws SQLException{
-        stmt.setInt(1, livro.getEdicao());
-        stmt.setString(2, livro.getTitulo());
-        stmt.setString(3, livro.getDescricao());
-        stmt.setString(4, livro.getIsbn());
     }
 
     private Livro obterLivroPorResultSet(ResultSet result) throws SQLException{

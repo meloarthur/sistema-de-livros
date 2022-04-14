@@ -1,5 +1,4 @@
 import dao.LivroDao;
-import domain.Livro;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,12 +13,8 @@ public class App extends Application{
         primaryStage.setScene(new Scene(root, 400, 300));
         primaryStage.show();
 
-        Livro livro = new Livro();
-
-        livro.setId(2);
-
         LivroDao livroDao = new LivroDao();
-        livroDao.obterPorId(livro);;
+        livroDao.obterTodos();
     }
 
     public static void main(String[] args) {
