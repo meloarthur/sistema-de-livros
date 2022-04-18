@@ -20,7 +20,7 @@ public class PrincipalController {
     @FXML
     void handleMostrarNome(ActionEvent event) {
         lbNomeInserido.setText(txtNome.getText());
-        lbNomeInserido.setVisible(true);;
+        lbNomeInserido.setVisible(true);
     }
 
 }
