@@ -18,7 +18,7 @@ public class PrincipalController {
     private TextField txtNome;
 
     @FXML
-    void handleMostrarNome(ActionEvent event) {
+    void handlerMostrarNome(ActionEvent event) {
         lbNomeInserido.setText(txtNome.getText());
         lbNomeInserido.setVisible(true);
     }

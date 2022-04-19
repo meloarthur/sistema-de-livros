@@ -1,7 +1,7 @@
 package domain;
 
 public class Livro {
-    private int id;
+    private Integer id;
     private String titulo;
     private String isbn;
     private Integer edicao;
@@ -11,7 +11,7 @@ public class Livro {
     public Livro() {
     }
 
-    public Livro(int id, String titulo, String isbn, Integer edicao, String autor, String descricao) {
+    public Livro(Integer id, String titulo, String isbn, Integer edicao, String autor, String descricao) {
         this.id = id;
         this.titulo = titulo;
         this.isbn = isbn;
@@ -20,10 +20,10 @@ public class Livro {
         this.descricao = descricao;
     }
     
-    public int getId() {
+    public Integer getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
     public String getTitulo() {

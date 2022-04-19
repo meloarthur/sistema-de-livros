@@ -33,7 +33,7 @@
          <children>
             <TextField fx:id="txtNome" layoutX="206.0" layoutY="153.0" />
             <Text layoutX="155.0" layoutY="174.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome:" />
-            <Button fx:id="btnMostrarNome" layoutX="241.0" layoutY="242.0" mnemonicParsing="false" onAction="#handleMostrarNome" text="Mostrar Nome" />
+            <Button fx:id="btnMostrarNome" layoutX="241.0" layoutY="242.0" mnemonicParsing="false" onAction="#handlerMostrarNome" text="Mostrar Nome" />
             <Label fx:id="lbNomeInserido" layoutX="282.0" layoutY="68.0" />
          </children>
       </AnchorPane>

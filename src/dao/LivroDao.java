@@ -4,6 +4,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import config.ConfigDB;
 import domain.Livro;
 
@@ -32,7 +34,7 @@ public class LivroDao {
             result.next();
             livro.setId(result.getInt("id"));
             stmt.close();
-            System.out.println("Linha inserida com sucesso!");
+            JOptionPane.showMessageDialog(null, "Linha inserida com sucesso!", "Cadastro de Livro", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e){
             e.printStackTrace();
         }
@@ -108,7 +110,7 @@ public class LivroDao {
             stmt.setInt(1, livro.getId());
             stmt.executeUpdate();
             
-            System.out.println("Linha excluida com sucesso!");
+            JOptionPane.showMessageDialog(null, "Linha excluida com sucesso!", "Exclusão de Livro", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e) {
             e.printStackTrace();
         }

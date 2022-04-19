@@ -7,10 +7,10 @@ import javafx.stage.Stage;
 public class Principal extends Application{
     @Override
     public void start(Stage stagePrincipal) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("./javafx/cenaprincipal.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("./javafx/cenalivro.fxml"));
         Scene scene = new Scene(root);
 
-        stagePrincipal.setTitle("Sistema de Biblioteca");
+        stagePrincipal.setTitle("Livros");
         stagePrincipal.setScene(scene);
         stagePrincipal.show();
     }
