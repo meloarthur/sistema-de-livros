@@ -15,6 +15,50 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class LivroDao {
+    public boolean verificaTitulo(String titulo){
+        String sql = "SELECT * FROM livro WHERE titulo = ?";
+
+        try(
+            Connection connect = ConfigDB.getConnection();
+            PreparedStatement stmt = connect.prepareStatement(sql);
+        ){
+            stmt.setString(1, titulo);
+
+            ResultSet result = stmt.executeQuery();
+
+            if (result.next()){
+                return true;
+            } else {
+                return false;
+            }
+        } catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean verificaIsbn(String isbn){
+        String sql = "SELECT * FROM livro WHERE isbn = ?";
+
+        try(
+            Connection connect = ConfigDB.getConnection();
+            PreparedStatement stmt = connect.prepareStatement(sql);
+        ){
+            stmt.setString(1, isbn);
+
+            ResultSet result = stmt.executeQuery();
+
+            if (result.next()){
+                return true;
+            } else {
+                return false;
+            }
+        } catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public void inserir(Livro livro){
         String sql = "INSERT INTO livro (titulo, isbn, edicao, autor, descricao) VALUES (?, ?, ?, ?, ?)";
         
@@ -41,7 +85,7 @@ public class LivroDao {
     }
 
     public List<Livro> obterTodos(){
-        String sql = "SELECT * FROM livro";
+        String sql = "SELECT * FROM livro ORDER BY titulo";
         List<Livro> livros = null;
 
         try(
@@ -63,51 +107,59 @@ public class LivroDao {
         return livros;
     }
 
-    public Livro obterPorId(Integer id){
-        String sql = "SELECT * FROM livro WHERE id = ?";
+    public List<Livro> obterPorTitulo(String titulo){
+        String sql = "SELECT * FROM livro WHERE UPPER(titulo) LIKE UPPER(?) ORDER BY titulo";
         Livro livro = null;
+        List<Livro> livros = null;
 
         try(
             Connection connect = ConfigDB.getConnection();
             PreparedStatement stmt = connect.prepareStatement(sql);
         ){
-            stmt.setInt(1, id);
+            stmt.setString(1, ("%" + titulo + "%"));;
             ResultSet result = stmt.executeQuery();
+            livros = new ArrayList<>();
 
-            if (result.next()){
+            while (result.next()){
                 livro = obterLivroPorResultSet(result);
+                livros.add(livro);
             }
         }  catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return livro;
+        return livros;
     }
 
-    public void atualizarEdicao(Livro livro){
-        String sql = "UPDATE livro SET edicao = ? WHERE id = ?";
+    public void atualizar(Livro livro){
+        String sql = "UPDATE livro SET titulo = ?, isbn = ?, edicao = ?, autor = ?, descricao = ? WHERE id = ?";
 
         try(
             Connection connect = ConfigDB.getConnection();
             PreparedStatement stmt = connect.prepareStatement(sql);
         ){
-            stmt.setInt(1, livro.getEdicao());
-            stmt.setLong(2, livro.getId());
+            stmt.setString(1, livro.getTitulo());
+            stmt.setString(2, livro.getIsbn());
+            stmt.setInt(3, livro.getEdicao());
+            stmt.setString(4, livro.getAutor());
+            stmt.setString(5, livro.getDescricao());
+            stmt.setInt(6, livro.getId());
+            stmt.executeUpdate();
 
-            System.out.println("Linha atualizada com sucesso!");
+            JOptionPane.showMessageDialog(null, "Linha atualizada com sucesso!", "Cadastro de Livro", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void deletar(Livro livro){
-        String sql = "DELETE FROM livro WHERE id = ?";
+    public void deletar(String titulo){
+        String sql = "DELETE FROM livro WHERE id = (select id from livro where titulo = ?)";
 
         try(
             Connection connect = ConfigDB.getConnection();
             PreparedStatement stmt = connect.prepareStatement(sql);
         ){
-            stmt.setInt(1, livro.getId());
+            stmt.setString(1, titulo);
             stmt.executeUpdate();
             
             JOptionPane.showMessageDialog(null, "Linha excluida com sucesso!", "Exclusão de Livro", JOptionPane.INFORMATION_MESSAGE);
