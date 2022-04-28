@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="307.0" prefWidth="455.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MenuController">
+   <center>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Text fill="RED" layoutX="113.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sistema de Livros" underline="true">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Text>
+            <Button fx:id="btnCadLivros" layoutX="129.0" layoutY="90.0" mnemonicParsing="false" onAction="#handlerCadLivros" prefHeight="39.0" prefWidth="197.0" text="Cadastro de Livros" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnSair" layoutX="201.0" layoutY="224.0" mnemonicParsing="false" onAction="#handlerSair" text="Sair">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnCadAutores" layoutX="129.0" layoutY="154.0" mnemonicParsing="false" onAction="#handlerCadAutores" prefHeight="39.0" prefWidth="197.0" text="Cadastro de Autores" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

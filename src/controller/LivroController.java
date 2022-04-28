@@ -1,9 +1,7 @@
 package controller;
 
 import java.util.List;
-
 import javax.swing.JOptionPane;
-
 import dao.LivroDao;
 import domain.Livro;
 import javafx.collections.FXCollections;
@@ -19,6 +17,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import principal.Principal;
 
 public class LivroController {
     
@@ -51,6 +50,9 @@ public class LivroController {
     
         @FXML
         private Button btnEditar;
+
+        @FXML
+        private Button btnVoltar;
 
         @FXML
         private TextField txtPesquisar;
@@ -129,6 +131,16 @@ public class LivroController {
         }
 
         @FXML
+        void handlerVoltar(ActionEvent event) {
+                String mensagem = "Deseja voltar ao menu?";
+                String title = "Confirmar operação";
+                int res = JOptionPane.showConfirmDialog(null, mensagem, title, JOptionPane.YES_NO_OPTION);
+
+                if (res == 0)
+                        Principal.mostrarMenu();
+        }
+
+        @FXML
         void handlerPesquisarLivro(ActionEvent event) {
                 mostrarTabela(txtPesquisar.getText());
                 txtPesquisar.requestFocus();
@@ -173,6 +185,12 @@ public class LivroController {
         void handlerCadastrarLivro(ActionEvent event) {
                 if (txtTitulo.getText().isEmpty() || txtAutor.getText().isEmpty() || txtDescricao.getText().isEmpty() || txtEdicao.getText().isEmpty() || txtISBN.getText().isEmpty()){
                         JOptionPane.showMessageDialog(null, "Preencha os campos vazios!", "Dados incompletos", JOptionPane.OK_OPTION);
+                        return;
+                }
+
+                if (txtDescricao.getText().length() > 100){
+                        JOptionPane.showMessageDialog(null, "Limite de caracteres atingido!\n\nDescrição: Máximo 100 caracteres", "Falha Encontrada", JOptionPane.OK_OPTION);
+                        txtDescricao.requestFocus();
                         return;
                 }
                 
@@ -227,7 +245,7 @@ public class LivroController {
                         JOptionPane.showMessageDialog(null, "Limite de caracteres atingido!\n\nDescrição: Máximo 100 caracteres", "Falha Encontrada", JOptionPane.OK_OPTION);
                         txtDescricao.requestFocus();
                         return;
-                    }
+                }
                 
                 if (!isNumeric(txtEdicao.getText())){
                         JOptionPane.showMessageDialog(null, "Dados inseridos incorretamente!", "Erro ao inserir", JOptionPane.OK_OPTION);

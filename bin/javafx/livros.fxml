@@ -14,7 +14,7 @@
                   <Font size="30.0" />
                </font>
             </Text>
-            <TextField fx:id="txtId" editable="false" layoutX="72.0" layoutY="12.0" prefHeight="31.0" prefWidth="16.0" visible="false" />
+            <TextField fx:id="txtId" editable="false" layoutX="370.0" layoutY="12.0" prefHeight="31.0" prefWidth="41.0" visible="false" />
          </children>
       </AnchorPane>
    </top>
@@ -56,16 +56,20 @@
             <Button fx:id="btnEditar" layoutX="119.0" layoutY="22.0" mnemonicParsing="false" onAction="#handlerEditarLivro" prefHeight="31.0" prefWidth="83.0" text="Atualizar" />
             <Button fx:id="btnExcluir" layoutX="218.0" layoutY="22.0" mnemonicParsing="false" onAction="#handlerExcluirLivro" prefHeight="31.0" prefWidth="83.0" text="Excluir" />
             <TableView fx:id="tvTabela" layoutX="462.0" layoutY="77.0" onKeyPressed="#handlerTabelaSeta" onMouseClicked="#handlerTabelaMouse" prefHeight="397.0" prefWidth="528.0">
-              <columns>
-                <TableColumn fx:id="clnTitulo" prefWidth="118.0" text="TITULO" />
-                <TableColumn fx:id="clnISBN" minWidth="0.0" prefWidth="67.0" text="ISBN" />
-                  <TableColumn fx:id="clnEdicao" prefWidth="68.0" text="EDICAO" />
-                  <TableColumn fx:id="clnAutor" prefWidth="116.0" text="AUTOR" />
-                  <TableColumn fx:id="clnDescricao" prefWidth="158.0" text="DESCRICAO" />
-              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+               <columns>
+                  <TableColumn fx:id="clnTitulo" prefWidth="75.0" text="TITULO" />
+                  <TableColumn fx:id="clnISBN" prefWidth="75.0" text="ISBN" />
+                  <TableColumn fx:id="clnEdicao" prefWidth="75.0" text="EDICAO" />
+                  <TableColumn fx:id="clnAutor" prefWidth="75.0" text="AUTOR" />
+                  <TableColumn fx:id="clnDescricao" prefWidth="75.0" text="DESCRICAO" />
+               </columns>
             </TableView>
             <TextField fx:id="txtPesquisar" layoutX="464.0" layoutY="22.0" prefHeight="31.0" prefWidth="432.0" promptText="Pesquisar por Título" />
             <Button fx:id="btnPesquisar" layoutX="907.0" layoutY="22.0" mnemonicParsing="false" onAction="#handlerPesquisarLivro" text="Pesquisar" />
+            <Button fx:id="btnVoltar" layoutX="19.0" layoutY="-43.0" mnemonicParsing="false" onAction="#handlerVoltar" prefHeight="31.0" prefWidth="83.0" text="Menu" />
          </children>
       </AnchorPane>
    </left>

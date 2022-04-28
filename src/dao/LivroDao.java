@@ -3,12 +3,9 @@ package dao;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JOptionPane;
-
 import config.ConfigDB;
 import domain.Livro;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -78,7 +75,7 @@ public class LivroDao {
             result.next();
             livro.setId(result.getInt("id"));
             stmt.close();
-            JOptionPane.showMessageDialog(null, "Linha inserida com sucesso!", "Cadastro de Livro", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Livro inserido com sucesso!", "Cadastro de Livro", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e){
             e.printStackTrace();
         }

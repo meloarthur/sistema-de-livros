@@ -4,13 +4,13 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
         {
             "type": "java",
-            "name": "Launch App",
+            "name": "Launch Principal",
             "request": "launch",
-            "mainClass": "Principal",
-            "vmArgs": "--module-path C:/JavaFX/javafx-sdk-17.0.2/lib --add-modules javafx.controls,javafx.fxml",
+            "mainClass": "principal.Principal",
+            "projectName": "sistema-de-livros_9455dca5",
+            "vmArgs": "--module-path C:/JavaFX/javafx-sdk-17.0.2/lib --add-modules javafx.controls,javafx.fxml"
         }
     ]
 }
