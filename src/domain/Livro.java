@@ -1,5 +1,7 @@
 package domain;
 
+import java.util.List;
+
 public class Livro {
     private Integer id;
     private String titulo;
@@ -7,19 +9,29 @@ public class Livro {
     private Integer edicao;
     private String autor;
     private String descricao;
+    private List<Autor> autores;
 
     public Livro() {
     }
-
-    public Livro(Integer id, String titulo, String isbn, Integer edicao, String autor, String descricao) {
+    
+    public Livro(Integer id, String titulo, String isbn, Integer edicao, String autor, String descricao, List<Autor> autores) {
         this.id = id;
         this.titulo = titulo;
         this.isbn = isbn;
         this.edicao = edicao;
         this.autor = autor;
         this.descricao = descricao;
+        this.autores = autores;
     }
-    
+
+    public List<Autor> getAutores() {
+        return autores;
+    }
+
+    public void setAutores(List<Autor> autores) {
+        this.autores = autores;
+    }
+
     public Integer getId() {
         return id;
     }

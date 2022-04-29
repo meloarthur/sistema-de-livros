@@ -1,14 +1,20 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+
+import dao.AutorDao;
 import dao.LivroDao;
-import domain.Livro;
+import domain.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -22,7 +28,7 @@ import principal.Principal;
 public class LivroController {
     
         @FXML
-        private TextField txtAutor;
+        private ListView<Autor> txtAutor;
 
         @FXML
         private TextField txtId;
@@ -64,7 +70,7 @@ public class LivroController {
         private TableColumn<Livro, String> clnTitulo;
 
         @FXML
-        private TableColumn<Livro, String> clnAutor;
+        private TableColumn<Autor, String> clnAutor;
 
         @FXML
         private TableColumn<Livro, String> clnISBN;
@@ -79,6 +85,10 @@ public class LivroController {
 
         ObservableList<Livro> livrosOL;
 
+        private List<Autor> autoresSelecionados = new ArrayList<Autor>();
+
+        AutorDao autorDao = new AutorDao();
+
         public boolean isNumeric(String str) {
                 try {
                         int valor = Integer.parseInt(str);
@@ -91,14 +101,33 @@ public class LivroController {
         public void initialize(){
                 clnTitulo.setCellValueFactory(new PropertyValueFactory<Livro, String>("titulo"));
                 clnISBN.setCellValueFactory(new PropertyValueFactory<Livro, String>("isbn"));
-                clnAutor.setCellValueFactory(new PropertyValueFactory<Livro, String>("autor"));
+                clnAutor.setCellValueFactory(new PropertyValueFactory<Autor, String>("autor"));
                 clnDescricao.setCellValueFactory(new PropertyValueFactory<Livro, String>("descricao"));
                 clnEdicao.setCellValueFactory(new PropertyValueFactory<Livro, Integer>("edicao"));
                 mostrarTabela("");
+                List<Autor> autores = autorDao.obterTodos();
+                for (Autor autor : autores) {
+                       txtAutor.getItems().add(autor); 
+                }
+                txtAutor.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+                txtAutor.getSelectionModel().selectedItemProperty().addListener((obs,ov,nv) -> {
+                        autoresSelecionados.clear();
+                        autoresSelecionados.addAll(txtAutor.getSelectionModel().getSelectedItems());
+                });
+                txtAutor.setCellFactory(Param -> new ListCell<Autor>(){
+                        @Override
+                        protected void updateItem(Autor autor, boolean empty){
+                                super.updateItem(autor, empty);
+                                if (empty || autor == null || autor.getNome() == null)
+                                        setText(null);
+                                else
+                                        setText(autor.getNome());
+                        }
+                });
         }
 
         void limparCampos(){
-                txtAutor.setText("");
+                txtAutor.getSelectionModel().clearSelection();
                 txtEdicao.setText("");
                 txtISBN.setText("");
                 txtDescricao.setText("");
@@ -132,12 +161,7 @@ public class LivroController {
 
         @FXML
         void handlerVoltar(ActionEvent event) {
-                String mensagem = "Deseja voltar ao menu?";
-                String title = "Confirmar operação";
-                int res = JOptionPane.showConfirmDialog(null, mensagem, title, JOptionPane.YES_NO_OPTION);
-
-                if (res == 0)
-                        Principal.mostrarMenu();
+                Principal.mostrarMenu();
         }
 
         @FXML
@@ -153,14 +177,14 @@ public class LivroController {
                 if (event.getCode() == KeyCode.UP){
                         txtTitulo.setText(livro.getTitulo());
                         txtISBN.setText(livro.getIsbn());
-                        txtAutor.setText(livro.getAutor());
+                        //txtAutor.setText(livro.getAutor());
                         txtDescricao.setText(livro.getDescricao());
                         txtEdicao.setText(String.valueOf(livro.getEdicao()));
                         txtId.setText(String.valueOf(livro.getId()));
                 } else if (event.getCode() == KeyCode.DOWN){
                         txtTitulo.setText(livro.getTitulo());
                         txtISBN.setText(livro.getIsbn());
-                        txtAutor.setText(livro.getAutor());
+                        //txtAutor.setText(livro.getAutor());
                         txtDescricao.setText(livro.getDescricao());
                         txtEdicao.setText(String.valueOf(livro.getEdicao()));
                         txtId.setText(String.valueOf(livro.getId()));
@@ -174,7 +198,7 @@ public class LivroController {
                 if (event.getClickCount() == 1 && livro != null){
                         txtTitulo.setText(livro.getTitulo());
                         txtISBN.setText(livro.getIsbn());
-                        txtAutor.setText(livro.getAutor());
+                        //txtAutor.setText(livro.getAutor());
                         txtDescricao.setText(livro.getDescricao());
                         txtEdicao.setText(String.valueOf(livro.getEdicao()));
                         txtId.setText(String.valueOf(livro.getId()));
@@ -183,8 +207,13 @@ public class LivroController {
 
         @FXML
         void handlerCadastrarLivro(ActionEvent event) {
-                if (txtTitulo.getText().isEmpty() || txtAutor.getText().isEmpty() || txtDescricao.getText().isEmpty() || txtEdicao.getText().isEmpty() || txtISBN.getText().isEmpty()){
+                if (txtTitulo.getText().isEmpty() || txtDescricao.getText().isEmpty() || txtEdicao.getText().isEmpty() || txtISBN.getText().isEmpty()){
                         JOptionPane.showMessageDialog(null, "Preencha os campos vazios!", "Dados incompletos", JOptionPane.OK_OPTION);
+                        return;
+                }
+
+                if (autoresSelecionados.size() == 0){
+                        JOptionPane.showMessageDialog(null, "Selecione um autor!", "Dados incompletos", JOptionPane.OK_OPTION);
                         return;
                 }
 
@@ -207,7 +236,7 @@ public class LivroController {
                 livro.setIsbn(txtISBN.getText());
                 livro.setEdicao(Integer.valueOf(txtEdicao.getText()));
                 livro.setDescricao(txtDescricao.getText());
-                livro.setAutor(txtAutor.getText());
+                livro.setAutores(autoresSelecionados);
 
                 if ((dao.verificaIsbn(livro.getIsbn()) == true) && (dao.verificaTitulo(livro.getTitulo()) == true)){
                         JOptionPane.showMessageDialog(null, "Título e ISBN já existentes!", "Falha Encontrada", JOptionPane.OK_OPTION);
@@ -236,7 +265,7 @@ public class LivroController {
 
         @FXML
         void handlerEditarLivro(ActionEvent event) {
-                if (txtTitulo.getText().isEmpty() || txtAutor.getText().isEmpty() || txtDescricao.getText().isEmpty() || txtEdicao.getText().isEmpty() || txtISBN.getText().isEmpty()){
+                if (txtTitulo.getText().isEmpty() || /*txtAutor.getText().isEmpty() ||*/ txtDescricao.getText().isEmpty() || txtEdicao.getText().isEmpty() || txtISBN.getText().isEmpty()){
                         JOptionPane.showMessageDialog(null, "Preencha os campos vazios!", "Dados incompletos", JOptionPane.OK_OPTION);
                         return;
                 }
@@ -260,7 +289,7 @@ public class LivroController {
                 livro.setIsbn(txtISBN.getText());
                 livro.setEdicao(Integer.valueOf(txtEdicao.getText()));
                 livro.setDescricao(txtDescricao.getText());
-                livro.setAutor(txtAutor.getText());
+                //livro.setAutor(txtAutor.getText());
                 livro.setId(Integer.valueOf(txtId.getText()));
 
                 dao.atualizar(livro);

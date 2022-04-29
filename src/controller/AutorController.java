@@ -197,12 +197,7 @@ public class AutorController {
 
     @FXML
     void handlerVoltar(ActionEvent event) {
-        String mensagem = "Deseja voltar ao menu?";
-        String title = "Confirmar operação";
-        int res = JOptionPane.showConfirmDialog(null, mensagem, title, JOptionPane.YES_NO_OPTION);
-
-        if (res == 0)
-                Principal.mostrarMenu();
+        Principal.mostrarMenu();
     }
 
     @FXML

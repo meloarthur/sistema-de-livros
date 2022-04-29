@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import config.ConfigDB;
+import domain.Autor;
 import domain.Livro;
+import domain.LivroAutor;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -57,23 +60,36 @@ public class LivroDao {
     }
 
     public void inserir(Livro livro){
-        String sql = "INSERT INTO livro (titulo, isbn, edicao, autor, descricao) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO livro (titulo, isbn, edicao, descricao) VALUES (?, ?, ?, ?)";
         
         try(
             Connection connect = ConfigDB.getConnection();
             PreparedStatement stmt = connect.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         ){
+            connect.setAutoCommit(false);
             stmt.setString(1, livro.getTitulo());
             stmt.setString(2, livro.getIsbn());
             stmt.setInt(3, livro.getEdicao());
-            stmt.setString(4, livro.getAutor());
-            stmt.setString(5, livro.getDescricao());
+            stmt.setString(4, livro.getDescricao());
 
             stmt.executeUpdate();
 
             ResultSet result = stmt.getGeneratedKeys();
             result.next();
             livro.setId(result.getInt("id"));
+
+            LivroAutorDao livroAutorDao = new LivroAutorDao(connect);
+            List<LivroAutor> livroAutores = new ArrayList<LivroAutor>();
+            LivroAutor livroAutor;
+
+            for (Autor autor : livro.getAutores()) {
+                livroAutor = new LivroAutor(livro.getId(), autor.getId());
+                livroAutores.add(livroAutor);
+            }
+
+            livroAutorDao.inserir(livroAutores);
+            connect.commit();
+
             stmt.close();
             JOptionPane.showMessageDialog(null, "Livro inserido com sucesso!", "Cadastro de Livro", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e){
@@ -129,7 +145,7 @@ public class LivroDao {
     }
 
     public void atualizar(Livro livro){
-        String sql = "UPDATE livro SET titulo = ?, isbn = ?, edicao = ?, autor = ?, descricao = ? WHERE id = ?";
+        String sql = "UPDATE livro SET titulo = ?, isbn = ?, edicao = ?, descricao = ? WHERE id = ?";
 
         try(
             Connection connect = ConfigDB.getConnection();
@@ -138,9 +154,8 @@ public class LivroDao {
             stmt.setString(1, livro.getTitulo());
             stmt.setString(2, livro.getIsbn());
             stmt.setInt(3, livro.getEdicao());
-            stmt.setString(4, livro.getAutor());
-            stmt.setString(5, livro.getDescricao());
-            stmt.setInt(6, livro.getId());
+            stmt.setString(4, livro.getDescricao());
+            stmt.setInt(5, livro.getId());
             stmt.executeUpdate();
 
             JOptionPane.showMessageDialog(null, "Linha atualizada com sucesso!", "Cadastro de Livro", JOptionPane.INFORMATION_MESSAGE);

@@ -44,13 +44,12 @@
                   <Font size="18.0" />
                </font>
             </Text>
-            <TextField fx:id="txtAutor" layoutX="99.0" layoutY="235.0" prefHeight="31.0" prefWidth="301.0" />
-            <Text layoutX="14.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Descrição:">
+            <Text layoutX="12.0" layoutY="392.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Descrição:">
                <font>
                   <Font size="18.0" />
                </font>
             </Text>
-            <TextArea fx:id="txtDescricao" layoutX="99.0" layoutY="285.0" prefHeight="187.0" prefWidth="301.0" />
+            <TextArea fx:id="txtDescricao" layoutX="99.0" layoutY="373.0" prefHeight="99.0" prefWidth="301.0" />
             <Button fx:id="btnCadastrar" layoutX="19.0" layoutY="22.0" mnemonicParsing="false" onAction="#handlerCadastrarLivro" prefHeight="31.0" prefWidth="83.0" text="Cadastrar" />
             <Button fx:id="btnLimpar" layoutX="317.0" layoutY="22.0" mnemonicParsing="false" onAction="#handlerLimparCampos" prefHeight="31.0" prefWidth="83.0" text="Limpar" />
             <Button fx:id="btnEditar" layoutX="119.0" layoutY="22.0" mnemonicParsing="false" onAction="#handlerEditarLivro" prefHeight="31.0" prefWidth="83.0" text="Atualizar" />
@@ -70,6 +69,7 @@
             <TextField fx:id="txtPesquisar" layoutX="464.0" layoutY="22.0" prefHeight="31.0" prefWidth="432.0" promptText="Pesquisar por Título" />
             <Button fx:id="btnPesquisar" layoutX="907.0" layoutY="22.0" mnemonicParsing="false" onAction="#handlerPesquisarLivro" text="Pesquisar" />
             <Button fx:id="btnVoltar" layoutX="19.0" layoutY="-43.0" mnemonicParsing="false" onAction="#handlerVoltar" prefHeight="31.0" prefWidth="83.0" text="Menu" />
+            <ListView fx:id="txtAutor" layoutX="99.0" layoutY="237.0" prefHeight="122.0" prefWidth="301.0" />
          </children>
       </AnchorPane>
    </left>
